@@ -22,51 +22,60 @@ import com.nice.car.model.Car;
 import com.nice.car.service.CarService;
 
 @RestController
-public class CarController {
+public class CarController
+{
 
-	private CarService carService;
+    private CarService carService;
 
-	public CarController(CarService service) {
-		Objects.requireNonNull(service, "CarService is required for the class to function");
-		this.carService = service;
-	}
+    public CarController(CarService service)
+    {
+        Objects.requireNonNull(service, "CarService is required for the class to function");
+        this.carService = service;
+    }
 
-	@GetMapping(value = "/cars/{idOrPlateNumber}")
-	ResponseEntity<Car> getCar(@PathVariable String idOrPlateNumber) {
-		Car car = null;
-		try {
-			Long id = Long.parseLong(idOrPlateNumber);
-			car = carService.findOne(id);
-		} catch (NumberFormatException exception) {
-			car = carService.findOne(idOrPlateNumber);
-		}
-		return new ResponseEntity<>(car, HttpStatus.OK);
-	}
+    @GetMapping(value = "/cars/{idOrPlateNumber}")
+    ResponseEntity<Car> getCar(@PathVariable String idOrPlateNumber)
+    {
+        Car car = null;
+        try
+        {
+            Long id = Long.parseLong(idOrPlateNumber);
+            car = carService.findOne(id);
+        }
+        catch (NumberFormatException exception)
+        {
+            car = carService.findOne(idOrPlateNumber);
+        }
+        return new ResponseEntity<>(car, HttpStatus.OK);
+    }
 
-	@GetMapping(value = "/cars")
-	ResponseEntity<List<Car>> getAllCars() {
-		return new ResponseEntity<>(carService.findAll(), HttpStatus.OK);
-	}
+    @GetMapping(value = "/cars")
+    ResponseEntity<List<Car>> getAllCars()
+    {
+        return new ResponseEntity<>(carService.findAll(), HttpStatus.OK);
+    }
 
-	@PostMapping(value = "/cars")
-	ResponseEntity<Void> createCar(@Valid @RequestBody Car car) {
-		Car newCar = carService.create(car);
-		HttpHeaders responseHeaders = new HttpHeaders();
-		URI newUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newCar.getId())
-				.toUri();
-		responseHeaders.setLocation(newUserUri);
-		return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
-	}
+    @PostMapping(value = "/cars")
+    ResponseEntity<Void> createCar(@Valid @RequestBody Car car)
+    {
+        Car newCar = carService.create(car);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newCar.getId()).toUri();
+        responseHeaders.setLocation(newUserUri);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+    }
 
-	@PutMapping(value = "/cars/{id}")
-	ResponseEntity<Void> updateCar(@PathVariable Long id, @RequestBody @Valid Car car) {
-		carService.update(id, car);
-		return new ResponseEntity<>(null, HttpStatus.OK);
-	}
+    @PutMapping(value = "/cars/{id}")
+    ResponseEntity<Void> updateCar(@PathVariable Long id, @RequestBody @Valid Car car)
+    {
+        carService.update(id, car);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
 
-	@DeleteMapping(value = "/cars/{id}")
-	ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-		carService.delete(id);
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-	}
+    @DeleteMapping(value = "/cars/{id}")
+    ResponseEntity<Void> deleteUser(@PathVariable Long id)
+    {
+        carService.delete(id);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 }

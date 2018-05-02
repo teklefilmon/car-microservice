@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 import com.nice.car.model.Car;
 
 @Repository
-public interface CarRepository extends JpaRepository<Car, Long>{
+public interface CarRepository extends JpaRepository<Car, Long>
+{
 
-	Car findByPlateNumber(String plateNumber);
+    Car findByPlateNumber(String plateNumber);
 
 }

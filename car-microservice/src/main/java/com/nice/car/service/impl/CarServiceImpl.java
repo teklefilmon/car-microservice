@@ -11,55 +11,64 @@ import com.nice.car.exception.CarNotFoundException;
 import com.nice.car.model.Car;
 import com.nice.car.repository.CarRepository;
 import com.nice.car.service.CarService;
+
 @Service
 @Transactional
-public class CarServiceImpl implements CarService {
-	
-	private CarRepository carRepository;
-	
-	public CarServiceImpl(CarRepository carRepository) {
-		this.carRepository = carRepository;
-	}
+public class CarServiceImpl implements CarService
+{
 
-	@Override
-	public Car findOne(Long id) {
-		Optional<Car> car = carRepository.findById(id);
-		if(!car.isPresent())
-			throw new CarNotFoundException(String.format("Car with id %s not found", id));
-		return car.get();
-	}
-	
-	@Override
-	public Car findOne(String plateNumber) {
-		return carRepository.findByPlateNumber(plateNumber);
-	}
+    private CarRepository carRepository;
 
-	@Override
-	public List<Car> findAll() {
-		return carRepository.findAll();
-	}
+    public CarServiceImpl(CarRepository carRepository)
+    {
+        this.carRepository = carRepository;
+    }
 
-	@Override
-	public Car create(Car car) {
-		return carRepository.save(car);
-	}
+    @Override
+    public Car findOne(Long id)
+    {
+        Optional<Car> car = carRepository.findById(id);
+        if (!car.isPresent())
+            throw new CarNotFoundException(String.format("Car with id %s not found", id));
+        return car.get();
+    }
 
-	@Override
-	public void update(Long id, Car car) {
-		Car fetchedCar = findOne(id);
-		fetchedCar.setAvailability(car.getAvailability());
-		fetchedCar.setDailyPrice(car.getDailyPrice());
-		fetchedCar.setModel(car.getModel());
-		fetchedCar.setPlateNumber(car.getPlateNumber());
-		fetchedCar.setType(car.getType());
-		carRepository.save(fetchedCar);
-	}
+    @Override
+    public Car findOne(String plateNumber)
+    {
+        return carRepository.findByPlateNumber(plateNumber);
+    }
 
-	@Override
-	public void delete(Long id) {
-		findOne(id);
-		carRepository.deleteById(id);
+    @Override
+    public List<Car> findAll()
+    {
+        return carRepository.findAll();
+    }
 
-	}
+    @Override
+    public Car create(Car car)
+    {
+        return carRepository.save(car);
+    }
+
+    @Override
+    public void update(Long id, Car car)
+    {
+        Car fetchedCar = findOne(id);
+        fetchedCar.setAvailability(car.getAvailability());
+        fetchedCar.setDailyPrice(car.getDailyPrice());
+        fetchedCar.setModel(car.getModel());
+        fetchedCar.setPlateNumber(car.getPlateNumber());
+        fetchedCar.setType(car.getType());
+        carRepository.save(fetchedCar);
+    }
+
+    @Override
+    public void delete(Long id)
+    {
+        findOne(id);
+        carRepository.deleteById(id);
+
+    }
 
 }
